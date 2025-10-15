@@ -2,10 +2,12 @@ package br.com.movieflix.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +21,5 @@ public class Categoria {
 
     @Column(length = 100, nullable = false)
     private String nome;
+
 }
