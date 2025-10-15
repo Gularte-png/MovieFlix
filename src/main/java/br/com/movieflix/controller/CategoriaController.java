@@ -19,14 +19,8 @@ public class CategoriaController {
 
     private final CategoriaService categoriaService;
 
-    @GetMapping()
-    public ResponseEntity<List<CategoriaResponseDto>> buscarTodasCategorias() {
-        List<CategoriaResponseDto> categorias = categoriaService.buscarTodasCategorias().stream().map(CategoriaMapper::paraCategoriaResponse).toList();
-        return !categorias.isEmpty() ? ResponseEntity.ok(categorias) : ResponseEntity.noContent().build();
-    }
-
     @PostMapping()
-    public ResponseEntity<CategoriaResponseDto> salvarCategoria(@RequestBody CategoriaRequestDto categoriaRequestDto) {
+    public ResponseEntity<CategoriaResponseDto> criarCategoria(@RequestBody CategoriaRequestDto categoriaRequestDto) {
         Categoria newCategoria = CategoriaMapper.paraEntidade(categoriaRequestDto);
         Categoria categoria = categoriaService.salvarCategoria(newCategoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(CategoriaMapper.paraCategoriaResponse(categoria));
@@ -37,6 +31,12 @@ public class CategoriaController {
         return categoriaService.buscarCategoriaPorId(id)
                 .map(categoria -> ResponseEntity.status(HttpStatus.OK).body(CategoriaMapper.paraCategoriaResponse(categoria)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CategoriaResponseDto>> buscarTodasCategorias() {
+        List<CategoriaResponseDto> categorias = categoriaService.buscarTodasCategorias().stream().map(CategoriaMapper::paraCategoriaResponse).toList();
+        return !categorias.isEmpty() ? ResponseEntity.ok(categorias) : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
