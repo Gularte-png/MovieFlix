@@ -20,22 +20,25 @@ public class FilmeController {
     private final FilmeService filmeService;
 
     @PostMapping()
-    public ResponseEntity<FilmeResponseDto> criarCategoria(@RequestBody FilmeRequestDto filmeRequestDto) {
-        Filme filmeNovo = FilmeMapper.paraEntidade(filmeRequestDto);
-        Filme filme = filmeService.salvarFilme(filmeNovo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(FilmeMapper.parFilmeResponse(filme));
+    public ResponseEntity<FilmeResponseDto> criarFilme(@RequestBody FilmeRequestDto filmeRequestDto) {
+        Filme novoFilme = FilmeMapper.paraEntidade(filmeRequestDto);
+        Filme filme = filmeService.criarFilme(novoFilme);
+        return ResponseEntity.status(HttpStatus.CREATED).body(FilmeMapper.paraFilmeResponse(filme));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FilmeResponseDto> buscarCategoriaPorId(@PathVariable Long id) {
+    public ResponseEntity<FilmeResponseDto> buscarFilmePorId(@PathVariable Long id) {
         return filmeService.buscarFilmePorId(id)
-                .map(filme -> ResponseEntity.status(HttpStatus.OK).body(FilmeMapper.parFilmeResponse(filme)))
+                .map(filme -> ResponseEntity.status(HttpStatus.OK).body(FilmeMapper.paraFilmeResponse(filme)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping()
-    public ResponseEntity<List<FilmeResponseDto>> buscarTodasCategorias() {
-        List<FilmeResponseDto> filmes = filmeService.buscarTodosFilmes().stream().map(FilmeMapper::parFilmeResponse).toList();
+    public ResponseEntity<List<FilmeResponseDto>> buscarTodosFilmes() {
+        List<FilmeResponseDto> filmes = filmeService.buscarTodosFilmes()
+                .stream()
+                .map(FilmeMapper::paraFilmeResponse)
+                .toList();
         return !filmes.isEmpty() ? ResponseEntity.ok(filmes) : ResponseEntity.noContent().build();
     }
 
