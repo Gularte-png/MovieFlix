@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/filme")
@@ -20,29 +21,52 @@ public class FilmeController {
     private final FilmeService filmeService;
 
     @PostMapping()
-    public ResponseEntity<FilmeResponseDto> criarCategoria(@RequestBody FilmeRequestDto filmeRequestDto) {
-        Filme filmeNovo = FilmeMapper.paraEntidade(filmeRequestDto);
-        Filme filme = filmeService.salvarFilme(filmeNovo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(FilmeMapper.parFilmeResponse(filme));
+    public ResponseEntity<FilmeResponseDto> criarFilme(@RequestBody FilmeRequestDto filmeRequestDto) {
+        Filme novoFilme = FilmeMapper.paraEntidade(filmeRequestDto);
+        Filme filme = filmeService.criarFilme(novoFilme);
+        return ResponseEntity.status(HttpStatus.CREATED).body(FilmeMapper.paraFilmeResponse(filme));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FilmeResponseDto> buscarCategoriaPorId(@PathVariable Long id) {
+    public ResponseEntity<FilmeResponseDto> buscarFilmePorId(@PathVariable Long id) {
         return filmeService.buscarFilmePorId(id)
-                .map(filme -> ResponseEntity.status(HttpStatus.OK).body(FilmeMapper.parFilmeResponse(filme)))
+                .map(filme -> ResponseEntity.status(HttpStatus.OK).body(FilmeMapper.paraFilmeResponse(filme)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FilmeResponseDto> atualizarFilme(@PathVariable Long id, @RequestBody FilmeRequestDto filmeRequestDto) {
+        return filmeService.atualizarFilme(FilmeMapper.paraEntidade(filmeRequestDto), id)
+                .map(filme -> ResponseEntity.status(HttpStatus.OK).body(FilmeMapper.paraFilmeResponse(filme)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping()
-    public ResponseEntity<List<FilmeResponseDto>> buscarTodasCategorias() {
-        List<FilmeResponseDto> filmes = filmeService.buscarTodosFilmes().stream().map(FilmeMapper::parFilmeResponse).toList();
+    public ResponseEntity<List<FilmeResponseDto>> buscarTodosFilmes() {
+        List<FilmeResponseDto> filmes = filmeService.buscarTodosFilmes()
+                .stream()
+                .map(FilmeMapper::paraFilmeResponse)
+                .toList();
         return !filmes.isEmpty() ? ResponseEntity.ok(filmes) : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletarCategoriaPorId(@PathVariable Long id) {
-        filmeService.deletarFilmePorId(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<Void> deletarFilmePorId(@PathVariable Long id) {
+        Optional<Filme> filmeEncontrado = filmeService.buscarFilmePorId(id);
+
+        if (filmeEncontrado.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        filmeService.deletarFilmePorId(filmeEncontrado.get().getId());
+        return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<FilmeResponseDto>> buscarFilmePorCategoria(@RequestParam String categoria) {
+        List<FilmeResponseDto> filmesPorCategoria = filmeService.buscarFilmesPorCategoria(categoria);
+        return filmesPorCategoria.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.OK).body(filmesPorCategoria);
+    }
+
 
 }
