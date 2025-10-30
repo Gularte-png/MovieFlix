@@ -1,5 +1,6 @@
 package br.com.movieflix.controller;
 
+import br.com.movieflix.controller.doc.CategoriaControllerOpenAPI;
 import br.com.movieflix.entity.Categoria;
 import br.com.movieflix.entity.request.CategoriaRequestDto;
 import br.com.movieflix.entity.response.CategoriaResponseDto;
@@ -15,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/categoria")
 @RequiredArgsConstructor
-public class CategoriaController {
+public class CategoriaController implements CategoriaControllerOpenAPI {
 
     private final CategoriaService categoriaService;
 

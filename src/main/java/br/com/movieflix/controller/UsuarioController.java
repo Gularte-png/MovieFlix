@@ -1,9 +1,10 @@
 package br.com.movieflix.controller;
 
+import br.com.movieflix.controller.doc.UsuarioControllerOpenAPI;
 import br.com.movieflix.entity.Usuario;
-import br.com.movieflix.entity.dto.LoginResponseDTO;
 import br.com.movieflix.entity.request.LoginRequestDTO;
 import br.com.movieflix.entity.request.UsuarioRequestDto;
+import br.com.movieflix.entity.response.LoginResponseDTO;
 import br.com.movieflix.entity.response.UsuarioReponseDTO;
 import br.com.movieflix.service.TokenService;
 import br.com.movieflix.service.UsuarioService;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenAPI {
 
     private final UsuarioService usuarioService;
     private final AuthenticationManager authenticationManager;

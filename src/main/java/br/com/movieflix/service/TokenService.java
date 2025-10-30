@@ -1,8 +1,7 @@
 package br.com.movieflix.service;
 
 import br.com.movieflix.entity.Usuario;
-import br.com.movieflix.entity.dto.LoginResponseDTO;
-import br.com.movieflix.entity.request.LoginRequestDTO;
+import br.com.movieflix.entity.response.LoginResponseDTO;
 import br.com.movieflix.entity.response.UsuarioReponseDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

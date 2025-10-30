@@ -1,5 +1,6 @@
 package br.com.movieflix.controller;
 
+import br.com.movieflix.controller.doc.FilmeControllerOpenAPI;
 import br.com.movieflix.entity.Filme;
 import br.com.movieflix.entity.request.FilmeRequestDto;
 import br.com.movieflix.entity.response.FilmeResponseDto;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/filme")
 @RequiredArgsConstructor
-public class FilmeController {
+public class FilmeController implements FilmeControllerOpenAPI {
 
     private final FilmeService filmeService;
 

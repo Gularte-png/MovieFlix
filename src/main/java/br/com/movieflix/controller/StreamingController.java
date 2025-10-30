@@ -1,5 +1,6 @@
 package br.com.movieflix.controller;
 
+import br.com.movieflix.controller.doc.StreamingControllerOpenAPI;
 import br.com.movieflix.entity.Streaming;
 import br.com.movieflix.entity.request.StreamingRequestDto;
 import br.com.movieflix.entity.response.StreamingResponseDto;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/streaming")
-public class StreamingController {
+public class StreamingController implements StreamingControllerOpenAPI {
 
     private final StreamingService streamingService;
 

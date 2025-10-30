@@ -1,4 +1,4 @@
-package br.com.movieflix.entity.dto;
+package br.com.movieflix.entity.response;
 
 public record LoginResponseDTO (String token) {
 }
